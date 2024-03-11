@@ -1,0 +1,61 @@
+Terminales
+
+dot -> \.
+digit -> [0-9]
+digitNotZ -> [1-9]
+naturals -> digitNotZ | digitNotZ digit+
+numbers -> digit | digitNotZ digit+
+floatN -> numbers dot digit+
+letter -> [a-zA-Z]
+letters -> [a-zA-Z]+
+charInt -> letter | naturals
+true -> "true"
+false -> "false"
+boolN -> true | false 
+id -> letters (letters | numbers)*
+int -> "int"
+bool -> "boolean"
+float -> "float"
+char -> "char"
+string -> "string"
+array -> "array"
+types -> int | bool | float | char | string
+plus -> "+"
+minus -> "-"
+mult -> "*"
+div -> "/"
+pot -> "^"
+modul -> "%"
+plusP -> "++"
+minusM -> "--"
+operation -> plus | minus | mult | div | pot | modul
+if -> "if"
+else -> "else"
+while -> "while"
+swich -> "swich"
+case -> "case"
+for -> "for"
+in -> "in"
+range -> "range"
+greaterT -> ">"
+lowerT -> "<"
+greaterE -> ">="
+lowerE -> "<="
+equals -> "=="
+comparators -> greaderT | lowerT | greaterE | lowerE | equals
+assignment -> "="
+conjuntion -> "&"
+disjuntion -> "|"
+logicalE -> conjuntion | disjuntion
+not -> "!"
+global -> "glob"
+local -> "loc"
+scope -> global | local
+return -> "return"
+break -> "break"
+printf -> "printf"
+func -> "func"
+main -> "main"
+comment -> "//" | "/**/"
+param -> "param"
+read -> "read"
