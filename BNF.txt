@@ -1,4 +1,4 @@
-Terminales
+ Terminales
 
 dot -> \.
 digit -> [0-9]
@@ -42,6 +42,7 @@ lowerT -> "<"
 greaterE -> ">="
 lowerE -> "<="
 equals -> "=="
+notEquals -> "!="
 comparators -> greaderT | lowerT | greaterE | lowerE | equals
 assignment -> "="
 conjuntion -> "&"
@@ -59,3 +60,6 @@ main -> "main"
 comment -> "//" | "/**/"
 param -> "param"
 read -> "read"
+sep -> ":"
+delimiter -> ";"
+underS -> "_"

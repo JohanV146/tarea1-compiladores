@@ -1,4 +1,4 @@
-Produccines
+Producciones
 
 <expression> ::= <expression> operation <term>
 <expression> ::= <term>
@@ -6,23 +6,75 @@ Produccines
 <term> ::= <factor>
 <factor> ::= '(' <expression> ')'
 <factor> ::= numbers
+<factor> ::= floatN
+<factor> ::= boolN
 <factor> ::= id
 
 <arrayInt> ::= '[' (naturals | naturals (',' naturals)+) ']'
 <arrayChar> ::= '[' (letter | letter (',' letter)+) ']'
 
-<arrayAsig> ::= charInt ':' array '[' (id | naturals) ']'
-<statement> ::= scope ':' types ':' id ';'
-<statement> ::= scope ':' <arrayAsig> ';'
-<statement> ::= scope ':' types ':' id assignment (numbers | floatN | id | boolN | letter)
-<statement> ::= scope ':' types ':' id assignment <expression>
-<statement> ::= scope ':' types ':' id assignment '[' ']'
-<statement> ::= scope ':' types ':' id assignment <arrayInt>
-<statement> ::= scope ':' types ':' id assignment <arrayChar>
+<arrayAsig> ::= charInt sep array '[' (id | naturals) ']'
+<statement> ::= scope sep types sep id delimiter
+<statement> ::= scope sep <arrayAsig> delimiter
+<statement> ::= scope sep types sep id assignment (numbers | floatN | id | boolN | letter)
+<statement> ::= scope sep types sep id assignment <expression> delimiter
+<statement> ::= scope sep types sep id assignment '[' ']' delimiter
+<statement> ::= scope sep types sep id assignment <arrayInt> delimiter
+<statement> ::= scope sep types sep id assignment <arrayChar> delimiter
 
-<unaryOperations> ::= id plusP ';'
-<unaryOperations> ::= id minusM ';'
+<unaryOperations> ::= id plusP delimiter
+<unaryOperations> ::= id minusM delimiter
 
-<funtionStatement> ::= func ':' types ':' id '_' <body> '_'
-<funtionStatement> ::= func ':' types ':' main '_' <body> '_'
+<funtionStatement> ::= func sep types sep id underS <body> underS
+<funtionStatement> ::= func sep types sep main underS <body> underS
 
+<relationalOp> ::= expression greaterT expression | !(expression greaterT expression)
+<relationalOp> ::= expression lowerT expression | !(expression lowerT expression)
+<relationalOp> ::= expression greaterE expression | !(expression greaterE expression)
+<relationalOp> ::= expression lowerE expression | !(expression lowerE expression)
+<relationalOp> ::= expression equals expression | !(expression equals expression)
+<relationalOp> ::= expression notEquals expression | !(expression notEquals expression)
+
+<conjunctionExpressions> ::= <relationalOp> conjuntion <relationalOp>
+<conjunctionExpressions> ::= <relationalOp> disjuntion <relationalOp>
+<conjunctionExpressions> ::= <relationalOp> conjuntion <relationalOp> (conjuntion <relationalOp>)+
+<conjunctionExpressions> ::= <relationalOp> disjuntion <relationalOp> (disjuntion <relationalOp>)+
+<conjunctionExpressions> ::= (<relationalOp> conjuntion <relationalOp> (conjuntion <relationalOp>)* | <relationalOp> disjuntion <relationalOp> (disjuntion <relationalOp>)* )+
+
+<conditionals> ::= if '(' relationalOp ')' underS <body> underS
+<conditionals> ::= if '(' (conjunctionExpressions | !conjunctionExpressions) ')' underS <body> underS
+<conditionals> ::= if '(' (boolN | !boolN) ')' underS <body> underS
+<conditionals> ::= else underS <body> underS
+<conditionals> ::= else if '(' relationalOp ')' underS <body> underS
+<conditionals> ::= else if '(' (conjunctionExpressions | !conjunctionExpressions) ')' underS <body> underS
+<conditionals> ::= else if '(' (boolN | !boolN) ')' underS <body> underS
+
+<loops> ::= while '(' relationalOp ')' underS <body> underS
+<loops> ::= while '(' (conjunctionExpressions | !conjunctionExpressions) ')' underS <body> underS
+<loops> ::= while '(' (boolN | !boolN) ')' underS <body> underS
+<loops> ::= for in range '(' numbers ')' underS <body> underS
+<loops> ::= for in range '(' numbers ',' numbers ')' underS <body> underS
+<loops> ::= for in range '(' numbers ',' numbers ',' numbers ')' underS <body> underS
+
+<returns> ::= return delimiter
+<returns> ::= return sep (letter | numbers | boolN | floatN | letters) delimiter 
+<returns> ::= return sep id '(' ')' delimiter
+<returns> ::= return sep id '(' (letter | id | numbers | bool | floatN) ')' delimiter
+<returns> ::= return sep id '(' (letter | id | numbers | bool | floatN) ',' (letter | id | numbers | bool | floatN)+ ')' delimiter
+
+<bodyContent> ::= <returns> 
+<bodyContent> ::= break delimiter 
+<bodyContent> ::= printf '(' (letter | id | numbers | bool | floatN) ')' delimiter
+<bodyContent> ::= <statement>
+<bodyContent> ::= <unaryOperations>
+<bodyContent> ::= <expression> delimiter
+<bodyContent> ::= <conditionals>
+<bodyContent> ::= <loops>
+<bodyContent> ::= <relationalOp> delimiter
+<bodyContent> ::= <conjunctionExpressions> delimiter
+<bodyContent> ::= read '(' id ')' delimiter
+<bodyContent> ::= param sep types sep id delimiter
+
+
+<comments> ::= comment (id | letter | naturals | floatN)*
+<comments> ::= bodyContent comment (id | letter | naturals | floatN)*
