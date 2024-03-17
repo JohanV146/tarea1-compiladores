@@ -1,9 +1,17 @@
 Producciones
 
+<program> ::= <funtionStatement> ( <body> | <funtionStatement> | <comment> )* 
+
 <expression> ::= <expression> operation <term>
+<expression> ::= <expression> operation <expression>
 <expression> ::= <term>
+<expression> ::= minus '(' <expression> ')'
+<expression> ::= minus <expression>
+<expression> ::= '(' <expression> ')'
 <term> ::= <term> operation <factor>
+<term> ::= <factor> operation <term>
 <term> ::= <factor>
+<term> ::= <expression> 
 <factor> ::= '(' <expression> ')'
 <factor> ::= numbers
 <factor> ::= floatN
@@ -39,30 +47,34 @@ Producciones
 <conjunctionExpressions> ::= <relationalOp> disjuntion <relationalOp>
 <conjunctionExpressions> ::= <relationalOp> conjuntion <relationalOp> (conjuntion <relationalOp>)+
 <conjunctionExpressions> ::= <relationalOp> disjuntion <relationalOp> (disjuntion <relationalOp>)+
-<conjunctionExpressions> ::= (<relationalOp> conjuntion <relationalOp> (conjuntion <relationalOp>)* | <relationalOp> disjuntion <relationalOp> (disjuntion <relationalOp>)* )+
+<conjunctionExpressions> ::= <relationalOp> conjuntion <relationalOp> ((conjuntion <relationalOp>) | (disjuntion <relationalOp>))*
+<conjunctionExpressions> ::= <relationalOp> disjuntion <relationalOp> ((conjuntion <relationalOp>) | (disjuntion <relationalOp>))*
 
 <conditionals> ::= if '(' relationalOp ')' underS <body> underS
 <conditionals> ::= if '(' (conjunctionExpressions | !conjunctionExpressions) ')' underS <body> underS
 <conditionals> ::= if '(' (boolN | !boolN) ')' underS <body> underS
+<conditionals> ::= if '(' id ')' underS <body> underS
 <conditionals> ::= else underS <body> underS
 <conditionals> ::= else if '(' relationalOp ')' underS <body> underS
 <conditionals> ::= else if '(' (conjunctionExpressions | !conjunctionExpressions) ')' underS <body> underS
 <conditionals> ::= else if '(' (boolN | !boolN) ')' underS <body> underS
+<conditionals> ::= else if '(' id ')' underS <body> underS
 
 <loops> ::= while '(' relationalOp ')' underS <body> underS
 <loops> ::= while '(' (conjunctionExpressions | !conjunctionExpressions) ')' underS <body> underS
 <loops> ::= while '(' (boolN | !boolN) ')' underS <body> underS
-<loops> ::= for in range '(' numbers ')' underS <body> underS
-<loops> ::= for in range '(' numbers ',' numbers ')' underS <body> underS
-<loops> ::= for in range '(' numbers ',' numbers ',' numbers ')' underS <body> underS
+<loops> ::= while '(' id ')' underS <body> underS
+<loops> ::= for id in range '(' numbers ')' underS <body> underS
+<loops> ::= for id in range '(' numbers ',' numbers ')' underS <body> underS
+<loops> ::= for id in range '(' numbers ',' numbers ',' numbers ')' underS <body> underS
 
-<returns> ::= return delimiter
 <returns> ::= return sep (letter | numbers | boolN | floatN | letters) delimiter 
 <returns> ::= return sep id '(' ')' delimiter
-<returns> ::= return sep id '(' (letter | id | numbers | bool | floatN) ')' delimiter
-<returns> ::= return sep id '(' (letter | id | numbers | bool | floatN) ',' (letter | id | numbers | bool | floatN)+ ')' delimiter
+<returns> ::= return sep id '(' (letter | id | numbers | bool | floatN | funcCall) ')' delimiter
+<returns> ::= return sep id '(' (letter | id | numbers | bool | floatN | funcCall) (',' (letter | id | numbers | bool | floatN | funcCall))+ ')' delimiter
 
 <bodyContent> ::= <returns> 
+<bodyContent> ::= <funcCallD> 
 <bodyContent> ::= break delimiter 
 <bodyContent> ::= printf '(' (letter | id | numbers | bool | floatN) ')' delimiter
 <bodyContent> ::= <statement>
@@ -74,7 +86,27 @@ Producciones
 <bodyContent> ::= <conjunctionExpressions> delimiter
 <bodyContent> ::= read '(' id ')' delimiter
 <bodyContent> ::= param sep types sep id delimiter
+<bodyContent> ::= param sep types sep id delimiter
+<bodyContent> ::= <comments>
+<bodyContent> ::= <switch>
 
+<funcCallD> ::= id '('')' delimiter
+<funcCallD> ::= id '(' <funcCall> ')' delimiter
+<funcCallD> ::= id '(' (letter | id | numbers | bool | floatN) ')' delimiter
+<funcCallD> ::= id '(' (letter | id | numbers | bool | floatN)+ ')' delimiter
+<funcCallD> ::= id '(' (letter | id | numbers | bool | floatN | <funcCall> )+ ')' delimiter
+
+<funcCall> ::= id '(' (letter | id | numbers | bool | floatN) ')' 
+<funcCall> ::= id '(' (letter | id | numbers | bool | floatN)+ ')' 
+<funcCall> ::= id '(' (letter | id | numbers | bool | floatN | <funcCall> )+ ')' 
 
 <comments> ::= comment (id | letter | naturals | floatN)*
-<comments> ::= bodyContent comment (id | letter | naturals | floatN)*
+<comments> ::= <bodyContent>  comment (id | letter | naturals | floatN)*
+
+<body> ::= <bodyContent>
+
+<case> ::= case <expression> sep <body> 
+<case> ::= case <expression> sep <body> (case <expression> sep <body>)+
+
+<switch> ::= switch '(' <expression> ')' underS <case> default sep <body> underS
+<switch> ::= switch '(' <expression> ')' underS <case> underS
